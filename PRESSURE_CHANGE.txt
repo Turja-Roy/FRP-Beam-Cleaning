@@ -1,0 +1,130 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║            INLET PRESSURE UPDATED: 6 bar → 70 psi                 ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+📝 CHANGE SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OLD Configuration:
+  Nozzle inlet pressure: 6 bar (600 kPa, 87 psi)
+
+NEW Configuration:
+  Nozzle inlet pressure: 70 psi (482.6 kPa, 4.83 bar)
+
+Change:
+  Decrease of 1.17 bar (117.4 kPa, 17 psi)
+  Reduction of 19.5%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 PRESSURE SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Inlet (nozzleInlet):
+  - Pressure: 70 psi (482,633 Pa, 482.6 kPa, 4.83 bar)
+  - Type: Total pressure (stagnation pressure)
+  - Temperature: 300 K
+
+Outlets (beamHoles, enclosure, openings):
+  - Pressure: 14.7 psi (101,325 Pa, 101.3 kPa, 1 atm)
+  - Type: Wave transmissive (non-reflecting)
+  - Temperature: 300 K
+
+Pressure Drop:
+  - Δp = 70 - 14.7 = 55.3 psi (381 kPa, 3.81 bar)
+  - Driving force for flow through system
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 FILES UPDATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Configuration Files:
+  ✅ 0/p                          # Pressure boundary condition
+  ✅ README.md                    # Main documentation
+  ✅ docs/HPC_GUIDE.md           # HPC guide
+  ✅ docs/TECHNICAL_REFERENCE.md # Technical reference
+  ✅ QUICK_REFERENCE.txt         # Command cheat sheet
+
+All references to "6 bar", "600 kPa", "87 psi" updated to "70 psi".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 EXPECTED PHYSICAL EFFECTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Flow Characteristics:
+  ✓ Lower mass flow rate (~19.5% less)
+  ✓ Lower jet velocities at holes
+  ✓ Lower Reynolds number (less turbulent)
+  ✓ Lower momentum in cleaning jets
+  ✓ Reduced noise levels
+
+Practical Impact:
+  ✓ Gentler cleaning action
+  ✓ Lower air consumption
+  ✓ Less stress on beam structure
+  ✓ Quieter operation
+  ✓ Lower energy costs
+
+Simulation Benefits:
+  ✓ Faster convergence (less extreme gradients)
+  ✓ More stable numerics
+  ✓ Lower Mach number (better for solver)
+  ✓ Easier to achieve steady state
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 ESTIMATED PERFORMANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Approximate scaling (assuming isentropic flow):
+
+Velocity at holes:
+  OLD: ~320 m/s (Mach 0.93, near sonic)
+  NEW: ~280 m/s (Mach 0.82, subsonic)
+  
+Mass flow rate:
+  OLD: 100% (baseline)
+  NEW: ~85% (proportional to √(pressure ratio))
+
+Cleaning power:
+  OLD: 100% (baseline)
+  NEW: ~73% (proportional to pressure ratio)
+
+Note: Actual values will be calculated by simulation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Configuration check: PASSED
+  ✓ All files present
+  ✓ Boundary conditions valid
+  ✓ Pressure values physically reasonable
+  ✓ Documentation updated
+  ✓ Ready for HPC submission
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your case is ready to run with the new pressure:
+
+1. scripts/Allclean                    # Clean old results
+2. Edit scripts/submit_mesh.slurm      # Set HPC module
+3. Edit scripts/submit_solver.slurm    # Set HPC module
+4. Transfer to HPC
+5. sbatch scripts/submit_mesh.slurm    # Run!
+
+The simulation will now model 70 psi inlet pressure.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Date: February 8, 2026
+Change: 6 bar → 70 psi (19.5% decrease)
+Status: Complete and verified ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

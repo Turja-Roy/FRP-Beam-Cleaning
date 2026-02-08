@@ -1,0 +1,106 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    // ============================================
+    // NOZZLE INLET - Circular face at x=0, inside nozzle pipe
+    // ============================================
+    {
+        name    nozzleInletFaces;
+        type    faceSet;
+        action  new;
+        source  cylinderToCell;
+        sourceInfo
+        {
+            p1  (-0.001 0 0);        // Point behind inlet (meters)
+            p2  (0.001 0 0);         // Point just inside
+            radius 0.005;            // 5mm radius (inner diameter is 8.5mm)
+        }
+    }
+    
+    {
+        name    nozzleInletFaces;
+        type    faceSet;
+        action  subset;
+        source  patchToFace;
+        sourceInfo
+        {
+            patch nozzle;            // Only faces on nozzle patch
+        }
+    }
+    
+    // ============================================
+    // BEAM OUTLETS - Both ends of the beam (x=0 and x=1m)
+    // ============================================
+    
+    // Front outlet (x ≈ 0)
+    {
+        name    beamOutletsFaces;
+        type    faceSet;
+        action  new;
+        source  boxToFace;
+        sourceInfo
+        {
+            box (-0.001 0 0) (0.001 0.0508 0.0508);  // Small box at front end
+        }
+    }
+    
+    {
+        name    beamOutletsFaces;
+        type    faceSet;
+        action  subset;
+        source  patchToFace;
+        sourceInfo
+        {
+            patch beam;
+        }
+    }
+    
+    // Back outlet (x ≈ 1m)
+    {
+        name    beamOutletsFaces;
+        type    faceSet;
+        action  add;
+        source  boxToFace;
+        sourceInfo
+        {
+            box (0.999 0 0) (1.001 0.0508 0.0508);  // Small box at back end
+        }
+    }
+    
+    {
+        name    beamOutletsFaces;
+        type    faceSet;
+        action  subset;
+        source  patchToFace;
+        sourceInfo
+        {
+            patch beam;
+        }
+    }
+    
+    // ============================================
+    // HOLES - All 32 holes (16 top + 16 bottom)
+    // These are already on the beam patch, we'll keep them there
+    // or optionally create a separate "holes" patch
+    // ============================================
+    
+    // For now, holes will be part of "beam" patch
+    // If you want separate "holes" patch, add more topoSet actions here
+);
+
+// ************************************************************************* //

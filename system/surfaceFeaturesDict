@@ -1,0 +1,31 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeaturesDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+surfaces
+(
+    "beam_walls.stl"
+    "beam_front_opening.stl"
+    "beam_back_opening.stl"
+    "beam_holes.stl"
+    "nozzle.stl"
+    "nozzle_inlet.stl"
+    "enclosure.stl"
+);
+
+includedAngle   150;
+writeObj        yes;
+
+// ************************************************************************* //

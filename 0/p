@@ -1,0 +1,88 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -2 0 0 0 0];  // Pressure: Pa
+
+internalField   uniform 101325;  // Atmospheric pressure
+
+boundaryField
+{
+    walls  // Domain boundaries
+    {
+        type            zeroGradient;
+    }
+    
+    beamWalls  // Solid beam walls - no flow through
+    {
+        type            zeroGradient;
+    }
+    
+    nozzle  // Nozzle exterior walls - no flow through
+    {
+        type            zeroGradient;
+    }
+    
+    nozzleInlet  // HIGH PRESSURE AIR INLET - 70 psi
+    {
+        type            totalPressure;
+        p0              uniform 482633;  // 70 psi absolute (482.63 kPa, 4.83 bar)
+        value           uniform 482633;
+    }
+    
+    // ALL OUTLETS at atmospheric pressure
+    
+    beamFrontOpening  // Front opening of beam
+    {
+        type            waveTransmissive;
+        field           p;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            1.0;
+        value           uniform 101325;
+    }
+    
+    beamBackOpening  // Back opening of beam
+    {
+        type            waveTransmissive;
+        field           p;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            1.0;
+        value           uniform 101325;
+    }
+    
+    beamHoles  // All 32 holes (16 top + 16 bottom)
+    {
+        type            waveTransmissive;
+        field           p;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            1.0;
+        value           uniform 101325;
+    }
+    
+    enclosure  // Atmospheric enclosure boundary
+    {
+        type            waveTransmissive;
+        field           p;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            1.0;
+        value           uniform 101325;
+    }
+}
+
+// ************************************************************************* //

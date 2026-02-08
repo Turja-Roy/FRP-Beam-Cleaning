@@ -1,0 +1,275 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    beamWalls
+    {
+        type triSurfaceMesh;
+        file "beam_walls.stl";
+        name beamWalls;
+        scale 0.001;        // Convert mm to m
+    }
+    
+    beamFrontOpening
+    {
+        type triSurfaceMesh;
+        file "beam_front_opening.stl";
+        name beamFrontOpening;
+        scale 0.001;        // Convert mm to m
+    }
+    
+    beamBackOpening
+    {
+        type triSurfaceMesh;
+        file "beam_back_opening.stl";
+        name beamBackOpening;
+        scale 0.001;        // Convert mm to m
+    }
+    
+    beamHoles
+    {
+        type triSurfaceMesh;
+        file "beam_holes.stl";
+        name beamHoles;
+        scale 0.001;        // Convert mm to m
+    }
+    
+    nozzle
+    {
+        type triSurfaceMesh;
+        file "nozzle.stl";
+        name nozzle;
+        scale 0.001;        // Convert mm to m
+    }
+    
+    nozzleInlet
+    {
+        type triSurfaceMesh;
+        file "nozzle_inlet.stl";
+        name nozzleInlet;
+        scale 0.001;        // Convert mm to m
+    }
+    
+    enclosure
+    {
+        type triSurfaceMesh;
+        file "enclosure.stl";
+        name enclosure;
+        scale 0.001;        // Convert mm to m
+    }
+};
+
+castellatedMeshControls
+{
+    maxLocalCells 10000000;
+    maxGlobalCells 20000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 3;
+    
+    features
+    (
+        {
+            file "beam_walls.extendedFeatureEdgeMesh";
+            level 3;
+        }
+        {
+            file "beam_holes.extendedFeatureEdgeMesh";
+            level 5;        // High refinement for small holes
+        }
+        {
+            file "nozzle.extendedFeatureEdgeMesh";
+            level 4;
+        }
+        {
+            file "nozzle_inlet.extendedFeatureEdgeMesh";
+            level 5;
+        }
+        {
+            file "beam_front_opening.extendedFeatureEdgeMesh";
+            level 3;
+        }
+        {
+            file "beam_back_opening.extendedFeatureEdgeMesh";
+            level 3;
+        }
+    );
+    
+    refinementSurfaces
+    {
+        beamWalls
+        {
+            level (3 4);        // Increased from (1 2)
+            patchInfo
+            {
+                type wall;
+            }
+        }
+        
+        beamFrontOpening
+        {
+            level (3 4);        // Increased from (1 2)
+            patchInfo
+            {
+                type patch;
+            }
+        }
+        
+        beamBackOpening
+        {
+            level (3 4);        // Increased from (1 2)
+            patchInfo
+            {
+                type patch;
+            }
+        }
+        
+        beamHoles
+        {
+            level (5 6);        // Increased from (2 3) - CRITICAL for small holes
+            patchInfo
+            {
+                type patch;
+            }
+        }
+        
+        nozzle
+        {
+            level (4 5);        // Increased from (1 2)
+            patchInfo
+            {
+                type wall;
+            }
+        }
+        
+        nozzleInlet
+        {
+            level (5 6);        // Increased from (2 3)
+            patchInfo
+            {
+                type patch;
+            }
+        }
+        
+        enclosure
+        {
+            level (1 2);        // Coarse refinement - large domain boundary
+            patchInfo
+            {
+                type patch;     // Atmospheric boundary
+            }
+        }
+    }
+    
+    resolveFeatureAngle 30;
+    
+    refinementRegions
+    {
+        // Refine inside the beam cavity for flow resolution
+        beamWalls
+        {
+            mode inside;
+            levels ((1E15 3));      // Increased from level 1 to level 3
+        }
+        
+        // Additional refinement around holes region
+        beamHoles
+        {
+            mode distance;
+            levels ((0.002 5) (0.005 4));  // 2mm: level 5, 5mm: level 4
+        }
+        
+        // Refinement around nozzle region
+        nozzle
+        {
+            mode distance;
+            levels ((0.005 4));     // 5mm around nozzle: level 4
+        }
+    }
+    
+    // CRITICAL: This point MUST be inside the beam hollow interior
+    // Your beam interior (hollow part) is at:
+    //   X: -19.05 to +19.05 mm (±0.01905 m)
+    //   Y: 0 to -3240 mm (0 to -3.24 m)
+    //   Z: -19.05 to +19.05 mm (±0.01905 m)
+    //
+    // Using center point of interior cavity:
+    locationInMesh (0.0 -1.62 0.0);
+    
+    allowFreeStandingZoneFaces true;
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 100;
+    nRelaxIter 5;
+    nFeatureSnapIter 10;
+    implicitFeatureSnap false;
+    explicitFeatureSnap true;
+    multiRegionFeatureSnap false;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+    layers
+    {
+    }
+    
+    expansionRatio 1.0;
+    finalLayerThickness 0.3;
+    minThickness 0.1;
+    nGrow 0;
+    featureAngle 60;
+    nRelaxIter 3;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedianAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVol 1e-13;
+    minTetQuality 1e-15;
+    minArea -1;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.02;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+debug 0;
+mergeTolerance 1e-6;
+
+// ************************************************************************* //

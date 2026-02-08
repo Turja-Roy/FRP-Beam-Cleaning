@@ -1,0 +1,106 @@
+┌──────────────────────────────────────────────────────────────┐
+│  BEAMCLEANING QUICK REFERENCE - Updated for New Structure   │
+└──────────────────────────────────────────────────────────────┘
+
+📁 DIRECTORY OVERVIEW
+├── 0/          → Boundary conditions
+├── constant/   → Physics + STL geometries
+├── system/     → OpenFOAM config
+├── scripts/    → All executables ⭐
+├── docs/       → All documentation ⭐
+├── logs/       → Auto-generated logs
+└── README.md   → Start here!
+
+🚀 COMMON COMMANDS
+
+Local:
+  scripts/Allclean              Clean old files
+  scripts/Allrun.mesh           Generate mesh (1-4 hours)
+  scripts/Allrun.solver         Run solver (serial)
+  scripts/verify_config.sh      Check configuration
+  paraFoam                      Visualize results
+
+HPC:
+  sbatch scripts/submit_mesh.slurm     Submit mesh job
+  sbatch scripts/submit_solver.slurm   Submit solver job
+  squeue -u $USER                      Check job status
+  tail -f logs/mesh_*.out              Monitor mesh
+  tail -f logs/solver_*.out            Monitor solver
+
+📝 BEFORE HPC TRANSFER
+
+1. scripts/Allclean
+2. Edit scripts/submit_mesh.slurm (line 35)
+3. Edit scripts/submit_solver.slurm (line 27)
+4. scripts/verify_config.sh
+5. rsync -avz BeamCleaning/ user@hpc:~/
+
+🔧 CONFIGURATION FILES
+
+Mesh:
+  system/blockMeshDict          Background mesh (100×170×100)
+  system/snappyHexMeshDict      Refinement (levels 5-6)
+  system/surfaceFeaturesDict    Feature extraction
+
+Solver:
+  system/controlDict            Iterations, time control
+  system/fvSchemes              Numerical schemes
+  system/fvSolution             Linear solvers, relaxation
+
+Boundaries:
+  0/p       Pressure (482.6 kPa inlet, 101.325 kPa outlets)
+  0/U       Velocity (zeroGradient, noSlip, pressureInletOutlet)
+  0/T       Temperature (300K everywhere)
+  0/k       Turbulent kinetic energy
+  0/epsilon Turbulent dissipation
+  0/nut     Turbulent viscosity
+
+🎯 SIMULATION SPECS
+
+Solver:    rhoSimpleFoam (compressible, steady-state)
+Turbulence: k-epsilon RANS
+Inlet:     70 psi (4.83 bar) (nozzleInlet)
+Outlets:   1 atm (beamHoles, enclosure, openings)
+Mesh:      ~6-7M cells with enclosure
+Runtime:   3-5 hours (mesh), 12-24 hours (solver)
+
+📚 DOCUMENTATION
+
+Quick Start:
+  README.md                Main overview & directory structure
+  docs/HPC_GUIDE.md        Complete HPC guide (START HERE!)
+
+Technical:
+  docs/TECHNICAL_REFERENCE.md   Geometry specs, OpenFOAM details
+  QUICK_REFERENCE.txt           This file - command cheat sheet
+
+🆘 TROUBLESHOOTING
+
+Mesh fails:
+  → Check logs/mesh_*/log.snappyHexMesh
+  → Increase memory: scripts/submit_mesh.slurm line 7
+  → Increase time: scripts/submit_mesh.slurm line 8
+
+Module not found:
+  → Fix scripts/submit_mesh.slurm line 35
+  → Run on HPC: module avail openfoam
+
+Enclosure missing:
+  → After mesh: cat constant/polyMesh/boundary | grep enclosure
+  → Check logs/mesh_*/log.snappyHexMesh
+
+Solver diverges:
+  → Reduce relaxation: system/fvSolution
+  → Check mesh quality: checkMesh
+  → More stable schemes: system/fvSchemes
+
+⚠️  KNOWN ISSUES
+
+• Geometry has 32 holes (need 54 at 60mm spacing)
+  → Non-blocking, can fix after enclosure verification
+• Enclosure config untested (never meshed with it)
+  → Low risk, will validate on first HPC run
+
+✅ STATUS: Ready for HPC transfer!
+
+Run scripts/verify_config.sh to confirm.

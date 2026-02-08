@@ -1,0 +1,71 @@
+#!/bin/bash
+# Automated OpenFOAM solver workflow for beam cleaning simulation
+# Can be run from anywhere - will automatically navigate to case directory
+
+# Navigate to case root (one level up from scripts/)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CASE_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$CASE_DIR" || exit 1
+
+echo "=========================================="
+echo "DUNE Beam Cleaning CFD Simulation"
+echo "rhoSimpleFoam Solver"
+echo "=========================================="
+echo "Case directory: $CASE_DIR"
+echo ""
+
+# Create logs directory with timestamp
+LOGDIR="logs/solver_$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$LOGDIR"
+echo "Logs will be saved to: $LOGDIR"
+echo ""
+
+# Check if we're in the right directory
+if [ ! -f "system/controlDict" ]; then
+    echo "ERROR: Not in beamCleaning directory!"
+    echo "Please run this script from the case directory"
+    exit 1
+fi
+
+# Check if mesh exists
+if [ ! -f "constant/polyMesh/boundary" ]; then
+    echo "ERROR: Mesh not found! Run ./Allrun.mesh first."
+    exit 1
+fi
+
+echo "Starting rhoSimpleFoam solver..."
+echo "Check progress with: tail -f $LOGDIR/log.rhoSimpleFoam"
+echo ""
+
+# Run solver
+rhoSimpleFoam > "$LOGDIR/log.rhoSimpleFoam" 2>&1
+
+# Check if solver completed
+if [ $? -eq 0 ]; then
+    echo "✓ Solver completed successfully!"
+else
+    echo "⚠ Solver finished with warnings/errors"
+    echo "  Check $LOGDIR/log.rhoSimpleFoam for details"
+fi
+echo ""
+
+# Show final residuals
+echo "Final residuals:"
+grep "Solving for" "$LOGDIR/log.rhoSimpleFoam" | tail -10
+echo ""
+
+# List solution times
+echo "Solution time directories:"
+ls -d [0-9]* 2>/dev/null | tail -5
+echo ""
+
+echo "=========================================="
+echo "Simulation Complete!"
+echo "=========================================="
+echo ""
+echo "To visualize results:"
+echo "  paraFoam"
+echo ""
+echo "To check specific fields:"
+echo "  paraFoam -fields '(p U T)'"
+echo ""

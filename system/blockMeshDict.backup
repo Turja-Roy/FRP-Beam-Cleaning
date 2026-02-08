@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Enclosure dimensions (in mm, will convert to meters)
+// X: -250 to 250 (500mm width)
+// Y: -3740 to 500 (4240mm length) 
+// Z: -250 to 250 (500mm height)
+
+scale   0.001;  // Convert mm to meters
+
+vertices
+(
+    (-250  -3740  -250)  // 0
+    ( 250  -3740  -250)  // 1
+    ( 250    500  -250)  // 2
+    (-250    500  -250)  // 3
+    (-250  -3740   250)  // 4
+    ( 250  -3740   250)  // 5
+    ( 250    500   250)  // 6
+    (-250    500   250)  // 7
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (50 85 50) simpleGrading (1 1 1)
+    // 50 cells in X (500mm)
+    // 85 cells in Y (4240mm) 
+    // 50 cells in Z (500mm)
+    // Gives roughly 50mm cell size
+);
+
+edges
+(
+);
+
+boundary
+(
+    walls
+    {
+        type wall;
+        faces
+        (
+            (0 4 7 3)  // x-min face
+            (1 2 6 5)  // x-max face
+            (0 1 5 4)  // y-min face
+            (3 7 6 2)  // y-max face
+            (0 3 2 1)  // z-min face
+            (4 5 6 7)  // z-max face
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

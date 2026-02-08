@@ -1,0 +1,104 @@
+#!/bin/bash
+# Automated OpenFOAM workflow for beam cleaning simulation
+# Can be run from anywhere - will automatically navigate to case directory
+
+# Navigate to case root (one level up from scripts/)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CASE_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$CASE_DIR" || exit 1
+
+echo "=========================================="
+echo "DUNE Beam Cleaning CFD Simulation"
+echo "OpenFOAM Automated Workflow"
+echo "=========================================="
+echo "Case directory: $CASE_DIR"
+echo ""
+
+# Create logs directory with timestamp
+LOGDIR="logs/mesh_$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$LOGDIR"
+echo "Logs will be saved to: $LOGDIR"
+echo ""
+
+# Check if we're in the right directory
+if [ ! -f "system/controlDict" ]; then
+    echo "ERROR: Not in beamCleaning directory!"
+    echo "Please run this script from the case directory"
+    exit 1
+fi
+
+echo "Step 1/6: Cleaning old mesh and results..."
+rm -rf constant/polyMesh
+rm -rf constant/extendedFeatureEdgeMesh
+rm -rf [1-9]* processor* postProcessing
+echo "✓ Cleanup complete"
+echo ""
+
+echo "Step 2/6: Creating background mesh with blockMesh..."
+blockMesh > "$LOGDIR/log.blockMesh" 2>&1
+if [ $? -eq 0 ]; then
+    echo "✓ blockMesh successful"
+    # Show mesh stats
+    grep "cells:" "$LOGDIR/log.blockMesh"
+else
+    echo "✗ blockMesh failed! Check $LOGDIR/log.blockMesh"
+    exit 1
+fi
+echo ""
+
+echo "Step 3/6: Extracting surface features..."
+surfaceFeatures > "$LOGDIR/log.surfaceFeatures" 2>&1
+if [ $? -eq 0 ]; then
+    echo "✓ Surface features extracted"
+    ls -lh constant/extendedFeatureEdgeMesh/ | tee "$LOGDIR/features_list.txt"
+else
+    echo "✗ surfaceFeatures failed! Check $LOGDIR/log.surfaceFeatures"
+    exit 1
+fi
+echo ""
+
+echo "Step 4/6: Running snappyHexMesh (this may take a while)..."
+echo "   - Castellating mesh..."
+echo "   - Snapping to surface..."
+echo "   - This could take 30-120 minutes on HPC..."
+snappyHexMesh -overwrite > "$LOGDIR/log.snappyHexMesh" 2>&1
+if [ $? -eq 0 ]; then
+    echo "✓ snappyHexMesh complete"
+else
+    echo "⚠ snappyHexMesh may have issues - check $LOGDIR/log.snappyHexMesh"
+    echo "   Continuing anyway..."
+fi
+echo ""
+
+echo "Step 5/6: Checking mesh quality..."
+checkMesh > "$LOGDIR/log.checkMesh" 2>&1
+if grep -q "Mesh OK" "$LOGDIR/log.checkMesh"; then
+    echo "✓ Mesh quality is good!"
+    grep "cells:" "$LOGDIR/log.checkMesh"
+    grep "faces:" "$LOGDIR/log.checkMesh"
+    grep "points:" "$LOGDIR/log.checkMesh"
+else
+    echo "⚠ Mesh quality issues detected!"
+    echo "   Check $LOGDIR/log.checkMesh for details"
+    echo "   You may need to adjust snappyHexMeshDict settings"
+fi
+echo ""
+
+# Save mesh statistics
+echo "Step 6/6: Saving mesh statistics..."
+cat constant/polyMesh/boundary > "$LOGDIR/boundary_patches.txt"
+grep "cells:" "$LOGDIR/log.checkMesh" > "$LOGDIR/mesh_stats.txt"
+grep "faces:" "$LOGDIR/log.checkMesh" >> "$LOGDIR/mesh_stats.txt"
+grep "points:" "$LOGDIR/log.checkMesh" >> "$LOGDIR/mesh_stats.txt"
+echo "✓ Mesh statistics saved to $LOGDIR"
+echo ""
+
+echo "=========================================="
+echo "Setup Complete! Ready to run simulation."
+echo "=========================================="
+echo ""
+echo "Next steps:"
+echo "  - Check logs in: $LOGDIR"
+echo "  - Visualize mesh: paraFoam"
+echo "  - Run simulation: ./Allrun.solver"
+echo ""

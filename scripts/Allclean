@@ -1,0 +1,36 @@
+#!/bin/bash
+# ==============================================================================
+# Cleanup Script - Remove all generated files
+# BeamCleaning OpenFOAM Case
+# ==============================================================================
+
+# Navigate to case root (one level up from scripts/)
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CASE_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$CASE_DIR" || exit 1
+
+echo "Cleaning BeamCleaning case..."
+echo "Working in: $CASE_DIR"
+echo ""
+
+# Remove mesh files
+echo "  Removing mesh files..."
+rm -rf constant/polyMesh
+rm -rf constant/extendedFeatureEdgeMesh
+
+# Remove time directories (results)
+echo "  Removing time directories..."
+rm -rf [1-9]* processor* postProcessing
+
+# Remove log files in root directory
+echo "  Removing root log files..."
+rm -f log.*
+
+# Keep logs/ directory but optionally clean it
+# Uncomment the line below to remove all logs:
+# rm -rf logs/*
+
+echo "Cleanup complete!"
+echo ""
+echo "Case is now ready for fresh mesh generation."
+echo "Run: scripts/Allrun.mesh (local) or sbatch scripts/submit_mesh.slurm (HPC)"

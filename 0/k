@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];  // m²/s²
+
+internalField   uniform 0.375;
+
+boundaryField
+{
+    walls
+    {
+        type            inletOutlet;
+        inletValue      uniform 0.375;
+        value           uniform 0.375;
+    }
+    
+    beamWalls
+    {
+        type            kqRWallFunction;
+        value           uniform 0.375;
+    }
+    
+    nozzle
+    {
+        type            kqRWallFunction;
+        value           uniform 0.375;
+    }
+    
+    nozzleInlet
+    {
+        type            turbulentIntensityKineticEnergyInlet;
+        intensity       0.05;  // 5% turbulence intensity
+        value           uniform 0.375;
+    }
+    
+    beamFrontOpening
+    {
+        type            inletOutlet;
+        inletValue      uniform 0.375;
+        value           uniform 0.375;
+    }
+    
+    beamBackOpening
+    {
+        type            inletOutlet;
+        inletValue      uniform 0.375;
+        value           uniform 0.375;
+    }
+    
+    beamHoles
+    {
+        type            inletOutlet;
+        inletValue      uniform 0.375;
+        value           uniform 0.375;
+    }
+    
+    enclosure
+    {
+        type            inletOutlet;
+        inletValue      uniform 0.375;
+        value           uniform 0.375;
+    }
+}
+
+// ************************************************************************* //
