@@ -3,17 +3,24 @@
 #SBATCH --output=logs/mesh_%j.out
 #SBATCH --error=logs/mesh_%j.err
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32GB
-#SBATCH --time=04:00:00
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=48GB
+#SBATCH --time=03:00:00
 #SBATCH --partition=standard
 
 # ==============================================================================
+# OPTIMIZED CONFIGURATION (Feb 2026)
+# - Increased CPUs: 8 -> 12 (better snappyHexMesh performance)
+# - Increased Memory: 32GB -> 48GB (handles mesh refinement)
+# - Reduced Time: 4h -> 3h (expected with better parallelization)
+# ==============================================================================
+
 # SLURM Job Script for OpenFOAM Mesh Generation
 # BeamCleaning Simulation - DUNE Beam Cleaning
 # ==============================================================================
 
 echo "=========================================="
+echo "PERFORMANCE METRICS"
 echo "Job: $SLURM_JOB_NAME"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Node: $SLURM_NODELIST"
@@ -74,4 +81,12 @@ fi
 
 echo ""
 echo "Job finished at: $(date)"
-echo "Total runtime: $SECONDS seconds"
+echo "Total runtime: $SECONDS seconds ($(($SECONDS / 60)) minutes)"
+echo ""
+echo "=========================================="
+echo "PERFORMANCE SUMMARY"
+echo "=========================================="
+echo "Cores used: $SLURM_CPUS_PER_TASK"
+echo "Memory allocated: $SLURM_MEM_PER_NODE MB"
+echo "Runtime: $SECONDS seconds"
+echo "=========================================="

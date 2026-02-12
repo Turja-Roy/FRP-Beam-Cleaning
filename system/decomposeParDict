@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  13                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Decompose the mesh into 48 domains for parallel processing
+// Mesh size: ~1.7M cells -> ~35,400 cells per processor (optimal)
+numberOfSubdomains  48;
+
+// Decomposition method
+// 'scotch' - automatic load balancing (best for complex geometries)
+// 'hierarchical' - structured decomposition (predictable, good for uniform meshes)
+// 'simple' - simple geometric split
+method          scotch;
+
+// Optional: Hierarchical decomposition settings (if using method=hierarchical)
+hierarchicalCoeffs
+{
+    n               (4 4 3);  // Split into 4x4x3 = 48 subdomains
+    delta           0.001;
+    order           xyz;
+}
+
+// Optional: Simple decomposition settings (if using method=simple)
+simpleCoeffs
+{
+    n               (4 4 3);  // Split into 4x4x3 = 48 subdomains
+    delta           0.001;
+}
+
+// Scotch-specific settings (recommended)
+scotchCoeffs
+{
+    processorWeights    (1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                         1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                         1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1);
+    // Equal weights for all processors
+}
+
+// Preserve patches (boundary faces) on original patches
+distributed     no;
+roots           ();
+
+// ************************************************************************* //

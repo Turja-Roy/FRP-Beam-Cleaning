@@ -2,23 +2,33 @@
 #SBATCH --job-name=BeamClean_Solver
 #SBATCH --output=logs/solver_%j.out
 #SBATCH --error=logs/solver_%j.err
-#SBATCH --ntasks=16
+#SBATCH --ntasks=48
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=64GB
-#SBATCH --time=24:00:00
+#SBATCH --mem=144GB
+#SBATCH --time=08:00:00
 #SBATCH --partition=standard
 
 # ==============================================================================
+# OPTIMIZED CONFIGURATION (Feb 2026)
+# - Increased MPI tasks: 16 -> 48 (optimal decomposition: ~35k cells/core)
+# - Increased Memory: 64GB -> 144GB (3GB per core, safe for rhoSimpleFoam)
+# - Reduced Time: 24h -> 8h (expected 3x speedup with better parallelization)
+# - Mesh: ~1.7M cells optimally distributed across 48 processors
+# ==============================================================================
+
 # SLURM Job Script for OpenFOAM Solver (rhoSimpleFoam)
 # BeamCleaning Simulation - DUNE Beam Cleaning
 # ==============================================================================
 
 echo "=========================================="
+echo "PERFORMANCE METRICS"
 echo "Job: $SLURM_JOB_NAME"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Node(s): $SLURM_NODELIST"
 echo "Tasks: $SLURM_NTASKS"
+echo "CPUs per task: $SLURM_CPUS_PER_TASK"
 echo "Memory: $SLURM_MEM_PER_NODE MB"
+echo "Expected cells/core: ~35,400 (1.7M / 48)"
 echo "Start time: $(date)"
 echo "=========================================="
 echo ""
@@ -50,6 +60,7 @@ fi
 # Decompose mesh for parallel run (if using multiple tasks)
 if [ $SLURM_NTASKS -gt 1 ]; then
     echo "Decomposing mesh for $SLURM_NTASKS processors..."
+    echo "NOTE: Using decomposeParDict (scotch method for optimal load balancing)"
     decomposePar > "$LOGDIR/log.decomposePar" 2>&1
     if [ $? -eq 0 ]; then
         echo "✓ Mesh decomposed successfully"
@@ -98,7 +109,17 @@ fi
 
 echo ""
 echo "Job finished at: $(date)"
-echo "Total runtime: $SECONDS seconds"
+echo "Total runtime: $SECONDS seconds ($(($SECONDS / 3600))h $(($SECONDS % 3600 / 60))m)"
+echo ""
+echo "=========================================="
+echo "PERFORMANCE SUMMARY"
+echo "=========================================="
+echo "Cores used: $SLURM_NTASKS"
+echo "Runtime: $SECONDS seconds"
+if [ $SLURM_NTASKS -gt 1 ]; then
+    echo "Parallel efficiency: Check MPI communication time in logs"
+    echo "Target: <10% communication overhead for good scaling"
+fi
 echo ""
 echo "To visualize results:"
 echo "  paraFoam"
