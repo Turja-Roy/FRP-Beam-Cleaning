@@ -1,18 +1,22 @@
 #!/bin/bash
-#SBATCH --job-name=BeamClean_Mesh
-#SBATCH --output=logs/mesh_%j.out
-#SBATCH --error=logs/mesh_%j.err
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=12
-#SBATCH --mem=48GB
-#SBATCH --time=03:00:00
-#SBATCH --partition=standard
+#SBATCH -J BeamClean_Mesh          # Job name
+#SBATCH -o logs/mesh_%j.out        # Output file
+#SBATCH -e logs/mesh_%j.err        # Error file
+#SBATCH -p normal                  # Partition (normal for Lonestar6)
+#SBATCH -N 1                       # Number of nodes
+#SBATCH -n 12                      # Number of tasks (cores)
+#SBATCH -t 01:00:00                # Time limit (1 hour - safe for parallel snappyHexMesh)
+#SBATCH --mem=36                   # Memory per node in GB
+#SBATCH --mail-type=END,FAIL       # Email notifications
+#SBATCH --mail-user=turja.roy@uta.edu  # Email address
 
 # ==============================================================================
-# OPTIMIZED CONFIGURATION (Feb 2026)
-# - Increased CPUs: 8 -> 12 (better snappyHexMesh performance)
-# - Increased Memory: 32GB -> 48GB (handles mesh refinement)
-# - Reduced Time: 4h -> 3h (expected with better parallelization)
+# Lonestar6 (TACC) Optimized Configuration - Feb 2026
+# - Cores: 12 (PARALLEL snappyHexMesh using MPI decomposition)
+# - Memory: 36GB (3GB per core)
+# - Time: 1 hour (parallel snappyHexMesh: ~10-20 min, padding for safety)
+# - Partition: 'normal' (change to 'development' for quick testing, max 2h)
+# - Email: Notifications on END and FAIL
 # ==============================================================================
 
 # SLURM Job Script for OpenFOAM Mesh Generation
@@ -20,26 +24,20 @@
 # ==============================================================================
 
 echo "=========================================="
-echo "PERFORMANCE METRICS"
+echo "Lonestar6 Performance Metrics"
 echo "Job: $SLURM_JOB_NAME"
 echo "Job ID: $SLURM_JOB_ID"
-echo "Node: $SLURM_NODELIST"
-echo "CPUs: $SLURM_CPUS_PER_TASK"
-echo "Memory: $SLURM_MEM_PER_NODE MB"
+echo "Node(s): $SLURM_NODELIST"
+echo "Cores: $SLURM_NPROCS"
+echo "Memory: ${SLURM_MEM_PER_NODE}GB"
 echo "Start time: $(date)"
 echo "=========================================="
 echo ""
 
-# Load OpenFOAM module (adjust for your HPC system)
-# Common module names - uncomment the one that works for your system:
-# module load openfoam/13
-# module load openfoam/v2312
-# module load OpenFOAM/13-foss-2023a
-# Or source directly:
-# source /opt/openfoam13/etc/bashrc
-
-# REPLACE THIS LINE WITH YOUR HPC'S OPENFOAM LOADING COMMAND:
-module load openfoam/13
+# Load OpenFOAM 12 modules (Lonestar6 at TACC)
+module load intel/24.1
+module load impi/21.12
+module load openfoam/12
 
 echo "OpenFOAM version:"
 which blockMesh
@@ -86,7 +84,7 @@ echo ""
 echo "=========================================="
 echo "PERFORMANCE SUMMARY"
 echo "=========================================="
-echo "Cores used: $SLURM_CPUS_PER_TASK"
-echo "Memory allocated: $SLURM_MEM_PER_NODE MB"
+echo "Cores used: $SLURM_NPROCS"
+echo "Memory allocated: ${SLURM_MEM_PER_NODE}GB"
 echo "Runtime: $SECONDS seconds"
 echo "=========================================="

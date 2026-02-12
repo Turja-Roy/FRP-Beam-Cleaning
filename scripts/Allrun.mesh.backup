@@ -27,14 +27,14 @@ if [ ! -f "system/controlDict" ]; then
     exit 1
 fi
 
-echo "Step 1/8: Cleaning old mesh and results..."
+echo "Step 1/6: Cleaning old mesh and results..."
 rm -rf constant/polyMesh
 rm -rf constant/extendedFeatureEdgeMesh
 rm -rf [1-9]* processor* postProcessing
 echo "✓ Cleanup complete"
 echo ""
 
-echo "Step 2/8: Creating background mesh with blockMesh..."
+echo "Step 2/6: Creating background mesh with blockMesh..."
 blockMesh > "$LOGDIR/log.blockMesh" 2>&1
 if [ $? -eq 0 ]; then
     echo "✓ blockMesh successful"
@@ -46,19 +46,7 @@ else
 fi
 echo ""
 
-echo "Step 3/8: Decomposing mesh for parallel snappyHexMesh..."
-echo "   - Using 12 processors (configured in decomposeParDict.mesh)"
-decomposePar -decomposeParDict system/decomposeParDict.mesh -copyZero > "$LOGDIR/log.decomposePar" 2>&1
-if [ $? -eq 0 ]; then
-    echo "✓ Mesh decomposed for parallel processing"
-    echo "   Processor directories created: processor0 to processor11"
-else
-    echo "✗ Decomposition failed! Check $LOGDIR/log.decomposePar"
-    exit 1
-fi
-echo ""
-
-echo "Step 4/8: Extracting surface features..."
+echo "Step 3/6: Extracting surface features..."
 surfaceFeatures > "$LOGDIR/log.surfaceFeatures" 2>&1
 if [ $? -eq 0 ]; then
     echo "✓ Surface features extracted"
@@ -69,47 +57,20 @@ else
 fi
 echo ""
 
-echo "Step 5/8: Running snappyHexMesh in PARALLEL (this will be much faster)..."
-echo "   - Using 12 processors for parallel meshing"
+echo "Step 4/6: Running snappyHexMesh (this may take a while)..."
 echo "   - Castellating mesh..."
 echo "   - Snapping to surface..."
-echo "   - Expected time: 8-15 minutes on HPC (was 60-120 min serial)"
-echo ""
-
-# Detect if running on TACC (has ibrun) or local (use mpirun)
-if command -v ibrun &> /dev/null; then
-    echo "   Detected TACC system - using ibrun"
-    ibrun snappyHexMesh -parallel -overwrite -decomposeParDict system/decomposeParDict.mesh > "$LOGDIR/log.snappyHexMesh" 2>&1
-else
-    echo "   Using mpirun for parallel execution"
-    mpirun -np 12 snappyHexMesh -parallel -overwrite -decomposeParDict system/decomposeParDict.mesh > "$LOGDIR/log.snappyHexMesh" 2>&1
-fi
-
+echo "   - This could take 30-120 minutes on HPC..."
+snappyHexMesh -overwrite > "$LOGDIR/log.snappyHexMesh" 2>&1
 if [ $? -eq 0 ]; then
     echo "✓ snappyHexMesh complete"
 else
     echo "⚠ snappyHexMesh may have issues - check $LOGDIR/log.snappyHexMesh"
-    echo "   Continuing to reconstruction..."
+    echo "   Continuing anyway..."
 fi
 echo ""
 
-echo "Step 6/8: Reconstructing mesh from parallel run..."
-echo "   - Merging processor meshes into single mesh..."
-reconstructParMesh -constant -overwrite -decomposeParDict system/decomposeParDict.mesh > "$LOGDIR/log.reconstructParMesh" 2>&1
-if [ $? -eq 0 ]; then
-    echo "✓ Mesh reconstructed successfully"
-else
-    echo "✗ Reconstruction failed! Check $LOGDIR/log.reconstructParMesh"
-    exit 1
-fi
-
-# Clean up processor directories
-echo "   - Cleaning up processor directories..."
-rm -rf processor*
-echo "✓ Cleanup complete"
-echo ""
-
-echo "Step 7/8: Checking mesh quality..."
+echo "Step 5/6: Checking mesh quality..."
 checkMesh > "$LOGDIR/log.checkMesh" 2>&1
 if grep -q "Mesh OK" "$LOGDIR/log.checkMesh"; then
     echo "✓ Mesh quality is good!"
@@ -124,7 +85,7 @@ fi
 echo ""
 
 # Save mesh statistics
-echo "Step 8/8: Saving mesh statistics..."
+echo "Step 6/6: Saving mesh statistics..."
 cat constant/polyMesh/boundary > "$LOGDIR/boundary_patches.txt"
 grep "cells:" "$LOGDIR/log.checkMesh" > "$LOGDIR/mesh_stats.txt"
 grep "faces:" "$LOGDIR/log.checkMesh" >> "$LOGDIR/mesh_stats.txt"

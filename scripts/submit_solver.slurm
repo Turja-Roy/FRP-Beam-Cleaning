@@ -1,19 +1,26 @@
 #!/bin/bash
-#SBATCH --job-name=BeamClean_Solver
-#SBATCH --output=logs/solver_%j.out
-#SBATCH --error=logs/solver_%j.err
-#SBATCH --ntasks=48
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=144GB
-#SBATCH --time=08:00:00
-#SBATCH --partition=standard
+#SBATCH -J BeamClean_Solver        # Job name
+#SBATCH -o logs/solver_%j.out      # Output file
+#SBATCH -e logs/solver_%j.err      # Error file
+#SBATCH -p normal                  # Partition (normal for Lonestar6)
+#SBATCH -N 1                       # Number of nodes
+#SBATCH -n 48                      # Number of tasks (cores)
+#SBATCH -t 08:00:00                # Time limit (8 hours)
+#SBATCH --mem=144                  # Memory per node in GB
+#SBATCH --mail-type=END,FAIL       # Email notifications
+#SBATCH --mail-user=turja.roy@uta.edu  # Email address
 
 # ==============================================================================
-# OPTIMIZED CONFIGURATION (Feb 2026)
-# - Increased MPI tasks: 16 -> 48 (optimal decomposition: ~35k cells/core)
-# - Increased Memory: 64GB -> 144GB (3GB per core, safe for rhoSimpleFoam)
-# - Reduced Time: 24h -> 8h (expected 3x speedup with better parallelization)
-# - Mesh: ~1.7M cells optimally distributed across 48 processors
+# Lonestar6 (TACC) Optimized Configuration - Feb 2026
+# - Nodes: 1 (single node for low-latency MPI communication)
+# - Cores: 48 (optimal decomposition: ~35k cells/core for 1.7M cell mesh)
+# - Memory: 144GB (3GB per core)
+# - Time: 8 hours (reduced from 24h with 3x better parallelization)
+# - Partition: 'normal' (change to 'development' for testing, max 2h)
+# - Email: Notifications on END and FAIL
+#
+# NOTE: Lonestar6 ICX nodes have 128 cores/node
+#       You can scale up to 64-96 cores if needed for larger meshes
 # ==============================================================================
 
 # SLURM Job Script for OpenFOAM Solver (rhoSimpleFoam)
@@ -21,20 +28,21 @@
 # ==============================================================================
 
 echo "=========================================="
-echo "PERFORMANCE METRICS"
+echo "Lonestar6 Performance Metrics"
 echo "Job: $SLURM_JOB_NAME"
 echo "Job ID: $SLURM_JOB_ID"
 echo "Node(s): $SLURM_NODELIST"
 echo "Tasks: $SLURM_NTASKS"
-echo "CPUs per task: $SLURM_CPUS_PER_TASK"
-echo "Memory: $SLURM_MEM_PER_NODE MB"
+echo "Memory: ${SLURM_MEM_PER_NODE}GB"
 echo "Expected cells/core: ~35,400 (1.7M / 48)"
 echo "Start time: $(date)"
 echo "=========================================="
 echo ""
 
-# Load OpenFOAM module
-module load openfoam/13
+# Load OpenFOAM 12 modules (Lonestar6 at TACC)
+module load intel/24.1
+module load impi/21.12
+module load openfoam/12
 
 echo "OpenFOAM version:"
 which rhoSimpleFoam
@@ -70,9 +78,9 @@ if [ $SLURM_NTASKS -gt 1 ]; then
     fi
     echo ""
     
-    # Run solver in parallel
+    # Run solver in parallel using ibrun (TACC's MPI launcher)
     echo "Running rhoSimpleFoam in parallel..."
-    mpirun -np $SLURM_NTASKS rhoSimpleFoam -parallel > "$LOGDIR/log.rhoSimpleFoam" 2>&1
+    ibrun rhoSimpleFoam -parallel > "$LOGDIR/log.rhoSimpleFoam" 2>&1
     
     # Reconstruct the solution
     echo "Reconstructing solution..."

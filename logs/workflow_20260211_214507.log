@@ -1,0 +1,15 @@
+[2026-02-11 21:45:07] INFO: Case directory: /My-Drive/Research/BeamCleaning
+[2026-02-11 21:45:07] INFO: Script directory: /My-Drive/Research/BeamCleaning/scripts
+[2026-02-11 21:45:07] INFO: Workflow log: /My-Drive/Research/BeamCleaning/logs/workflow_20260211_214507.log
+[2026-02-11 21:45:07] INFO: Mode: check-only
+[2026-02-11 21:45:07] ERROR: sbatch command not found. Not on a SLURM system?
+[2026-02-11 21:45:07] SUCCESS: submit_mesh.slurm found
+[2026-02-11 21:45:07] SUCCESS: submit_solver.slurm found
+[2026-02-11 21:45:07] SUCCESS: system/ directory found
+[2026-02-11 21:45:07] SUCCESS: constant/ directory found
+[2026-02-11 21:45:07] SUCCESS: system/decomposeParDict.mesh found
+[2026-02-11 21:45:07] SUCCESS: system/decomposeParDict found
+[2026-02-11 21:45:07] SUCCESS: 7 STL geometry files found
+[2026-02-11 21:45:07] SUCCESS: logs/ directory exists
+[2026-02-11 21:45:07] ERROR: Configuration check failed with 1 error(s)
+[2026-02-11 21:45:07] ERROR: Configuration check failed. Aborting.

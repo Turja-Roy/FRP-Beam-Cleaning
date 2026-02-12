@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  12                                    |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict.mesh;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Decomposition for MESH GENERATION (snappyHexMesh)
+// This file is used during mesh generation phase
+// Uses 12 cores (matching SLURM allocation in submit_mesh.slurm)
+//
+// NOTE: This is separate from system/decomposeParDict (48 cores for solver)
+
+numberOfSubdomains  12;
+
+// Decomposition method
+// 'scotch' - automatic load balancing (best for complex geometries)
+// 'hierarchical' - structured decomposition (predictable)
+method          scotch;
+
+// Optional: Hierarchical decomposition settings (if using method=hierarchical)
+hierarchicalCoeffs
+{
+    n               (3 2 2);  // Split into 3x2x2 = 12 subdomains
+    delta           0.001;
+    order           xyz;
+}
+
+// Optional: Simple decomposition settings (if using method=simple)
+simpleCoeffs
+{
+    n               (3 2 2);  // Split into 3x2x2 = 12 subdomains
+    delta           0.001;
+}
+
+// Scotch-specific settings (recommended)
+scotchCoeffs
+{
+    processorWeights    (1 1 1 1 1 1 1 1 1 1 1 1);
+    // Equal weights for all 12 processors
+}
+
+// Preserve patches (boundary faces) on original patches
+distributed     no;
+roots           ();
+
+// ************************************************************************* //
