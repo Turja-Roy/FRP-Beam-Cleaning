@@ -1,1 +1,11 @@
+constant/polyMesh/pointLevel filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/points filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/sets filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/cellLevel filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/faces filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/level0Edge filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/boundary filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/cellProc filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/neighbour filter=lfs diff=lfs merge=lfs -text
+constant/polyMesh/owner filter=lfs diff=lfs merge=lfs -text
 constant/polyMesh/* filter=lfs diff=lfs merge=lfs -text
