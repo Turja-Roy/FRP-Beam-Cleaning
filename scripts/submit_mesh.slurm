@@ -5,7 +5,7 @@
 #SBATCH -p normal                  # Partition (normal for Lonestar6)
 #SBATCH -N 1                       # Number of nodes
 #SBATCH -n 12                      # Number of tasks (cores)
-#SBATCH -t 01:00:00                # Time limit (1 hour - safe for parallel snappyHexMesh)
+#SBATCH -t 12:00:00                # Time limit
 #SBATCH --mem=36                   # Memory per node in GB
 #SBATCH --mail-type=END,FAIL       # Email notifications
 #SBATCH --mail-user=turja.roy@uta.edu  # Email address

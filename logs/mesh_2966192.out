@@ -1,0 +1,73 @@
+==========================================
+Lonestar6 Performance Metrics
+Job: BeamClean_Mesh
+Job ID: 2966192
+Node(s): c312-034
+Cores: 12
+Memory: 36GB
+Start time: Thu Mar  5 09:13:50 CST 2026
+==========================================
+
+OpenFOAM version:
+/home1/apps/intel24/impi21/OpenFOAM/OpenFOAM-12/platforms/linux64IcxDPInt32Opt/bin/blockMesh
+
+Working directory: /work/11170/roy/FRP-Beam-Cleaning
+
+Starting mesh generation...
+Starting mesh generation...
+Case: /work/11170/roy/FRP-Beam-Cleaning
+
+Cleaning old mesh...
+
+Running blockMesh...
+✓ blockMesh done
+
+Extracting features...
+✓ Features done
+
+Decomposing for parallel meshing (12 cores)...
+✓ Decomposed
+
+Running snappyHexMesh in parallel...
+✓ snappyHexMesh done
+
+Reconstructing mesh...
+✓ Reconstructed
+
+Cleaning up...
+✓ Cleanup done
+
+Checking mesh quality...
+WARNING: Mesh has issues, check log
+
+Mesh generation complete!
+Logs: logs/mesh_20260305_091351
+
+==========================================
+Mesh generation SUCCESSFUL!
+==========================================
+
+Boundary patches created:
+    format      binary;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+    beamWalls
+    beamFrontOpening
+    beamBackOpening
+    beamHoles
+    nozzle
+    nozzleInlet
+
+Mesh statistics:
+
+Job finished at: Thu Mar  5 16:21:01 CST 2026
+Total runtime: 25631 seconds (427 minutes)
+
+==========================================
+PERFORMANCE SUMMARY
+==========================================
+Cores used: 12
+Memory allocated: 36GB
+Runtime: 25631 seconds
+==========================================

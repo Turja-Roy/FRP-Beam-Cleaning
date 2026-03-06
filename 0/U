@@ -20,12 +20,6 @@ internalField   uniform (0 0 0);
 
 boundaryField
 {
-    walls
-    {
-        type            pressureInletOutletVelocity;
-        value           uniform (0 0 0);
-    }
-    
     beamWalls
     {
         type            noSlip;

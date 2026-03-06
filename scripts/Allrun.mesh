@@ -1,143 +1,84 @@
 #!/bin/bash
-# Automated OpenFOAM workflow for beam cleaning simulation
-# Can be run from anywhere - will automatically navigate to case directory
+# Simple mesh generation script
 
-# Navigate to case root (one level up from scripts/)
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CASE_DIR="$(dirname "$SCRIPT_DIR")"
-cd "$CASE_DIR" || exit 1
+cd "$(dirname "$0")/.." || exit 1
 
-echo "=========================================="
-echo "DUNE Beam Cleaning CFD Simulation"
-echo "OpenFOAM Automated Workflow"
-echo "=========================================="
-echo "Case directory: $CASE_DIR"
+echo "Starting mesh generation..."
+echo "Case: $(pwd)"
 echo ""
 
-# Create logs directory with timestamp
+# Clean old mesh
+echo "Cleaning old mesh..."
+rm -rf constant/polyMesh constant/extendedFeatureEdgeMesh processor* [1-9]*
+echo ""
+
+# Create log directory
 LOGDIR="logs/mesh_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$LOGDIR"
-echo "Logs will be saved to: $LOGDIR"
-echo ""
 
-# Check if we're in the right directory
-if [ ! -f "system/controlDict" ]; then
-    echo "ERROR: Not in beamCleaning directory!"
-    echo "Please run this script from the case directory"
-    exit 1
-fi
-
-echo "Step 1/8: Cleaning old mesh and results..."
-rm -rf constant/polyMesh
-rm -rf constant/extendedFeatureEdgeMesh
-rm -rf [1-9]* processor* postProcessing
-echo "✓ Cleanup complete"
-echo ""
-
-echo "Step 2/8: Creating background mesh with blockMesh..."
+# Background mesh
+echo "Running blockMesh..."
 blockMesh > "$LOGDIR/log.blockMesh" 2>&1
-if [ $? -eq 0 ]; then
-    echo "✓ blockMesh successful"
-    # Show mesh stats
-    grep "cells:" "$LOGDIR/log.blockMesh"
-else
-    echo "✗ blockMesh failed! Check $LOGDIR/log.blockMesh"
+if [ $? -ne 0 ]; then
+    echo "ERROR: blockMesh failed"
     exit 1
 fi
+echo "✓ blockMesh done"
 echo ""
 
-echo "Step 3/8: Decomposing mesh for parallel snappyHexMesh..."
-echo "   - Using 12 processors (configured in decomposeParDict.mesh)"
-decomposePar -decomposeParDict system/decomposeParDict.mesh -copyZero > "$LOGDIR/log.decomposePar" 2>&1
-if [ $? -eq 0 ]; then
-    echo "✓ Mesh decomposed for parallel processing"
-    echo "   Processor directories created: processor0 to processor11"
-else
-    echo "✗ Decomposition failed! Check $LOGDIR/log.decomposePar"
-    exit 1
-fi
-echo ""
-
-echo "Step 4/8: Extracting surface features..."
+# Extract features
+echo "Extracting features..."
 surfaceFeatures > "$LOGDIR/log.surfaceFeatures" 2>&1
-if [ $? -eq 0 ]; then
-    echo "✓ Surface features extracted"
-    ls -lh constant/extendedFeatureEdgeMesh/ | tee "$LOGDIR/features_list.txt"
-else
-    echo "✗ surfaceFeatures failed! Check $LOGDIR/log.surfaceFeatures"
+echo "✓ Features done"
+echo ""
+
+# Decompose for parallel snappyHexMesh
+echo "Decomposing for parallel meshing (12 cores)..."
+cp system/decomposeParDict.mesh system/decomposeParDict
+decomposePar -copyZero > "$LOGDIR/log.decomposePar" 2>&1
+if [ $? -ne 0 ]; then
+    echo "ERROR: decomposePar failed"
     exit 1
 fi
+echo "✓ Decomposed"
 echo ""
 
-echo "Step 5/8: Running snappyHexMesh in PARALLEL (this will be much faster)..."
-echo "   - Using 12 processors for parallel meshing"
-echo "   - Castellating mesh..."
-echo "   - Snapping to surface..."
-echo "   - Expected time: 8-15 minutes on HPC (was 60-120 min serial)"
-echo ""
-
-# Detect if running on TACC (has ibrun) or local (use mpirun)
+# Run snappyHexMesh in parallel
+echo "Running snappyHexMesh in parallel..."
 if command -v ibrun &> /dev/null; then
-    echo "   Detected TACC system - using ibrun"
-    ibrun snappyHexMesh -parallel -overwrite -decomposeParDict system/decomposeParDict.mesh > "$LOGDIR/log.snappyHexMesh" 2>&1
+    ibrun snappyHexMesh -parallel -overwrite > "$LOGDIR/log.snappyHexMesh" 2>&1
 else
-    echo "   Using mpirun for parallel execution"
-    mpirun -np 12 snappyHexMesh -parallel -overwrite -decomposeParDict system/decomposeParDict.mesh > "$LOGDIR/log.snappyHexMesh" 2>&1
+    mpirun -np 12 snappyHexMesh -parallel -overwrite > "$LOGDIR/log.snappyHexMesh" 2>&1
 fi
-
-if [ $? -eq 0 ]; then
-    echo "✓ snappyHexMesh complete"
-else
-    echo "⚠ snappyHexMesh may have issues - check $LOGDIR/log.snappyHexMesh"
-    echo "   Continuing to reconstruction..."
-fi
+echo "✓ snappyHexMesh done"
 echo ""
 
-echo "Step 6/8: Reconstructing mesh from parallel run..."
-echo "   - Merging processor meshes into single mesh..."
-reconstructParMesh -constant -overwrite -decomposeParDict system/decomposeParDict.mesh > "$LOGDIR/log.reconstructParMesh" 2>&1
-if [ $? -eq 0 ]; then
-    echo "✓ Mesh reconstructed successfully"
-else
-    echo "✗ Reconstruction failed! Check $LOGDIR/log.reconstructParMesh"
+# Reconstruct
+echo "Reconstructing mesh..."
+reconstructPar -constant > "$LOGDIR/log.reconstructPar" 2>&1
+if [ $? -ne 0 ]; then
+    echo "ERROR: reconstructPar failed"
     exit 1
 fi
-
-# Clean up processor directories
-echo "   - Cleaning up processor directories..."
-rm -rf processor*
-echo "✓ Cleanup complete"
+echo "✓ Reconstructed"
 echo ""
 
-echo "Step 7/8: Checking mesh quality..."
+# Cleanup
+echo "Cleaning up..."
+rm -rf processor*
+cp system/decomposeParDict system/decomposeParDict.mesh.used
+echo "✓ Cleanup done"
+echo ""
+
+# Check mesh
+echo "Checking mesh quality..."
 checkMesh > "$LOGDIR/log.checkMesh" 2>&1
 if grep -q "Mesh OK" "$LOGDIR/log.checkMesh"; then
-    echo "✓ Mesh quality is good!"
-    grep "cells:" "$LOGDIR/log.checkMesh"
-    grep "faces:" "$LOGDIR/log.checkMesh"
-    grep "points:" "$LOGDIR/log.checkMesh"
+    echo "✓ Mesh OK"
 else
-    echo "⚠ Mesh quality issues detected!"
-    echo "   Check $LOGDIR/log.checkMesh for details"
-    echo "   You may need to adjust snappyHexMeshDict settings"
+    echo "WARNING: Mesh has issues, check log"
 fi
 echo ""
 
-# Save mesh statistics
-echo "Step 8/8: Saving mesh statistics..."
-cat constant/polyMesh/boundary > "$LOGDIR/boundary_patches.txt"
-grep "cells:" "$LOGDIR/log.checkMesh" > "$LOGDIR/mesh_stats.txt"
-grep "faces:" "$LOGDIR/log.checkMesh" >> "$LOGDIR/mesh_stats.txt"
-grep "points:" "$LOGDIR/log.checkMesh" >> "$LOGDIR/mesh_stats.txt"
-echo "✓ Mesh statistics saved to $LOGDIR"
-echo ""
-
-echo "=========================================="
-echo "Setup Complete! Ready to run simulation."
-echo "=========================================="
-echo ""
-echo "Next steps:"
-echo "  - Check logs in: $LOGDIR"
-echo "  - Visualize mesh: paraFoam"
-echo "  - Run simulation: ./Allrun.solver"
-echo ""
+echo "Mesh generation complete!"
+echo "Logs: $LOGDIR"

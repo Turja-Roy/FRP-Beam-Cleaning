@@ -4,23 +4,23 @@
 #SBATCH -e logs/solver_%j.err      # Error file
 #SBATCH -p normal                  # Partition (normal for Lonestar6)
 #SBATCH -N 1                       # Number of nodes
-#SBATCH -n 48                      # Number of tasks (cores)
-#SBATCH -t 08:00:00                # Time limit (8 hours)
-#SBATCH --mem=144                  # Memory per node in GB
+#SBATCH -n 12                      # Number of tasks (cores)
+#SBATCH -t 24:00:00                # Time limit (24 hours)
+#SBATCH --mem=48                   # Memory per node in GB
 #SBATCH --mail-type=END,FAIL       # Email notifications
 #SBATCH --mail-user=turja.roy@uta.edu  # Email address
 
 # ==============================================================================
-# Lonestar6 (TACC) Optimized Configuration - Feb 2026
+# Lonestar6 (TACC) Configuration - 12 Core Setup
 # - Nodes: 1 (single node for low-latency MPI communication)
-# - Cores: 48 (optimal decomposition: ~35k cells/core for 1.7M cell mesh)
-# - Memory: 144GB (3GB per core)
-# - Time: 8 hours (reduced from 24h with 3x better parallelization)
-# - Partition: 'normal' (change to 'development' for testing, max 2h)
+# - Cores: 12 (mesh already decomposed for 12 processors)
+# - Memory: 48GB (4GB per core)
+# - Time: 24 hours (sufficient for 1.7M cell mesh on 12 cores)
+# - Partition: 'normal'
 # - Email: Notifications on END and FAIL
 #
-# NOTE: Lonestar6 ICX nodes have 128 cores/node
-#       You can scale up to 64-96 cores if needed for larger meshes
+# NOTE: This uses the existing 12-way mesh decomposition from mesh generation
+#       Each core handles ~142k cells (1.7M / 12)
 # ==============================================================================
 
 # SLURM Job Script for OpenFOAM Solver (rhoSimpleFoam)
@@ -34,7 +34,7 @@ echo "Job ID: $SLURM_JOB_ID"
 echo "Node(s): $SLURM_NODELIST"
 echo "Tasks: $SLURM_NTASKS"
 echo "Memory: ${SLURM_MEM_PER_NODE}GB"
-echo "Expected cells/core: ~35,400 (1.7M / 48)"
+echo "Expected cells/core: ~142,000 (1.7M / 12)"
 echo "Start time: $(date)"
 echo "=========================================="
 echo ""
@@ -67,14 +67,29 @@ fi
 
 # Decompose mesh for parallel run (if using multiple tasks)
 if [ $SLURM_NTASKS -gt 1 ]; then
-    echo "Decomposing mesh for $SLURM_NTASKS processors..."
-    echo "NOTE: Using decomposeParDict (scotch method for optimal load balancing)"
-    decomposePar > "$LOGDIR/log.decomposePar" 2>&1
-    if [ $? -eq 0 ]; then
-        echo "✓ Mesh decomposed successfully"
+    # Check if mesh is already decomposed
+    PROC_DIRS=$(find . -maxdepth 1 -type d -name "processor*" | wc -l)
+    
+    if [ $PROC_DIRS -eq $SLURM_NTASKS ]; then
+        echo "Mesh already decomposed for $SLURM_NTASKS processors (found $PROC_DIRS processor directories)"
+        echo "✓ Using existing decomposition"
     else
-        echo "✗ Decomposition failed! Check $LOGDIR/log.decomposePar"
-        exit 1
+        echo "Decomposing mesh for $SLURM_NTASKS processors..."
+        echo "NOTE: Using decomposeParDict (scotch method for optimal load balancing)"
+        
+        # Clean old processor directories if count mismatch
+        if [ $PROC_DIRS -gt 0 ]; then
+            echo "Removing old processor directories (found $PROC_DIRS, need $SLURM_NTASKS)..."
+            rm -rf processor*
+        fi
+        
+        decomposePar > "$LOGDIR/log.decomposePar" 2>&1
+        if [ $? -eq 0 ]; then
+            echo "✓ Mesh decomposed successfully"
+        else
+            echo "✗ Decomposition failed! Check $LOGDIR/log.decomposePar"
+            exit 1
+        fi
     fi
     echo ""
     
@@ -98,6 +113,20 @@ fi
 
 # Check convergence
 if [ -f "$LOGDIR/log.rhoSimpleFoam" ]; then
+    # Check if solver actually ran (look for fatal errors)
+    if grep -q "FOAM FATAL ERROR" "$LOGDIR/log.rhoSimpleFoam"; then
+        echo ""
+        echo "=========================================="
+        echo "Solver FAILED!"
+        echo "=========================================="
+        echo ""
+        echo "Error found in log:"
+        grep -A5 "FOAM FATAL ERROR" "$LOGDIR/log.rhoSimpleFoam"
+        echo ""
+        echo "Check full log: $LOGDIR/log.rhoSimpleFoam"
+        exit 1
+    fi
+    
     echo ""
     echo "=========================================="
     echo "Solver completed!"
@@ -108,8 +137,14 @@ if [ -f "$LOGDIR/log.rhoSimpleFoam" ]; then
     echo ""
     
     # Save final statistics
-    ls -d [0-9]* | tail -1 > "$LOGDIR/final_time.txt"
-    echo "Final time step: $(cat $LOGDIR/final_time.txt)"
+    FINAL_TIME=$(ls -d [0-9]* 2>/dev/null | tail -1)
+    if [ -n "$FINAL_TIME" ]; then
+        echo "$FINAL_TIME" > "$LOGDIR/final_time.txt"
+        echo "Final time step: $FINAL_TIME"
+    else
+        echo "WARNING: No solution time directories found!"
+        echo "Solver may not have run any iterations."
+    fi
 else
     echo "ERROR: Solver log not found!"
     exit 1

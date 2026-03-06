@@ -48,17 +48,17 @@ edges
 
 boundary
 (
-    walls
+    enclosure
     {
-        type wall;
+        type patch;
         faces
         (
-            (0 4 7 3)  // x-min face
-            (1 2 6 5)  // x-max face
-            (0 1 5 4)  // y-min face
-            (3 7 6 2)  // y-max face
-            (0 3 2 1)  // z-min face
-            (4 5 6 7)  // z-max face
+            (0 4 7 3)  // x-min face - atmosphere
+            (1 2 6 5)  // x-max face - atmosphere
+            (0 1 5 4)  // y-min face - atmosphere
+            (3 7 6 2)  // y-max face - atmosphere
+            (0 3 2 1)  // z-min face - atmosphere
+            (4 5 6 7)  // z-max face - atmosphere
         );
     }
 );

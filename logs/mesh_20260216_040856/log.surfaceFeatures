@@ -1,0 +1,337 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-6aa359dae696
+Exec   : surfaceFeatures
+Date   : Feb 16 2026
+Time   : 04:09:17
+Host   : "c314-071.ls6.tacc.utexas.edu"
+PID    : 1031535
+I/O    : uncollated
+Case   : /work/11170/roy/FRP-Beam-Cleaning
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading "surfaceFeaturesDict"
+
+Surface            : "beam_walls.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 48
+Vertices     : 24
+Bounding Box : (-25.4 -3240.1 -25.4) (25.4 0 25.4)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 20
+    feature edges  : 32
+    of which
+        region edges   : 4
+        external edges : 20
+        internal edges : 8
+
+
+Final feature set:
+points      : 20
+edges       : 32
+boundingBox : (-25.4 -3240.1 -25.4) (25.4 0 25.4)
+point classification :
+    convex feature points          :       12
+    concave feature points         :        4
+    mixed feature points           :        4
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :       20
+    internal (concave angle) edges :        8
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        4
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/beam_walls.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/beam_walls"
+
+Writing featureEdgeMesh to "constant/triSurface/beam_walls.eMesh"
+
+Surface            : "beam_front_opening.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 12
+Vertices     : 8
+Bounding Box : (-19.05 -0.1 -19.05) (19.05 4.22995e-15 19.05)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 8
+    feature edges  : 12
+    of which
+        region edges   : 0
+        external edges : 12
+        internal edges : 0
+
+
+Final feature set:
+points      : 8
+edges       : 12
+boundingBox : (-19.05 -0.1 -19.05) (19.05 4.22995e-15 19.05)
+point classification :
+    convex feature points          :        8
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :       12
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/beam_front_opening.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/beam_front_opening"
+
+Writing featureEdgeMesh to "constant/triSurface/beam_front_opening.eMesh"
+
+Surface            : "beam_back_opening.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 12
+Vertices     : 8
+Bounding Box : (-19.05 -3240.1 -19.05) (19.05 -3240 19.05)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 8
+    feature edges  : 12
+    of which
+        region edges   : 0
+        external edges : 12
+        internal edges : 0
+
+
+Final feature set:
+points      : 8
+edges       : 12
+boundingBox : (-19.05 -3240.1 -19.05) (19.05 -3240 19.05)
+point classification :
+    convex feature points          :        8
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :       12
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/beam_back_opening.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/beam_back_opening"
+
+Writing featureEdgeMesh to "constant/triSurface/beam_back_opening.eMesh"
+
+Surface            : "beam_holes.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 19360
+Vertices     : 9720
+Bounding Box : (-1.74574 -3211.75 -25.4) (1.75 -28.2511 25.4)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 180
+    feature edges  : 10068
+    of which
+        region edges   : 528
+        external edges : 9540
+        internal edges : 0
+
+
+Final feature set:
+points      : 9720
+edges       : 10068
+boundingBox : (-1.74574 -3211.75 -25.4) (1.75 -28.2511 25.4)
+point classification :
+    convex feature points          :        0
+    concave feature points         :        0
+    mixed feature points           :      180
+    other (non-feature) points     :     9540
+edge classification :
+    external (convex angle) edges  :     9540
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :      528
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/beam_holes.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/beam_holes"
+
+Writing featureEdgeMesh to "constant/triSurface/beam_holes.eMesh"
+
+Surface            : "nozzle.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 2772
+Vertices     : 1386
+Bounding Box : (-10 -3000 -9.99689) (10 -2490 9.99689)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 0
+    feature edges  : 504
+    of which
+        region edges   : 0
+        external edges : 504
+        internal edges : 0
+
+
+Final feature set:
+points      : 504
+edges       : 504
+boundingBox : (-10 -3000 -9.99689) (10 -2490 9.99689)
+point classification :
+    convex feature points          :        0
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :      504
+edge classification :
+    external (convex angle) edges  :      504
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/nozzle.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/nozzle"
+
+Writing featureEdgeMesh to "constant/triSurface/nozzle.eMesh"
+
+Surface            : "nozzle_inlet.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 240
+Vertices     : 122
+Bounding Box : (-4.24546 -2600.17 -4.24859) (4.24935 -2599.93 4.24859)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 0
+    feature edges  : 122
+    of which
+        region edges   : 0
+        external edges : 122
+        internal edges : 0
+
+
+Final feature set:
+points      : 122
+edges       : 122
+boundingBox : (-4.24546 -2600.17 -4.24859) (4.24935 -2599.93 4.24859)
+point classification :
+    convex feature points          :        0
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :      122
+edge classification :
+    external (convex angle) edges  :      122
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/nozzle_inlet.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/nozzle_inlet"
+
+Writing featureEdgeMesh to "constant/triSurface/nozzle_inlet.eMesh"
+
+Surface            : "enclosure.stl"
+
+
+Feature line extraction is only valid on closed manifold surfaces.
+Statistics:
+Triangles    : 12
+Vertices     : 8
+Bounding Box : (-250 -3740 -250) (250 500 250)
+
+
+Constructing feature set from included angle 2.61799
+Selecting edges purely based on geometric tests: no
+
+Initial feature set:
+    feature points : 8
+    feature edges  : 12
+    of which
+        region edges   : 0
+        external edges : 12
+        internal edges : 0
+
+
+Final feature set:
+points      : 8
+edges       : 12
+boundingBox : (-250 -3740 -250) (250 500 250)
+point classification :
+    convex feature points          :        8
+    concave feature points         :        0
+    mixed feature points           :        0
+    other (non-feature) points     :        0
+edge classification :
+    external (convex angle) edges  :       12
+    internal (concave angle) edges :        0
+    flat region edges              :        0
+    open edges                     :        0
+    multiply connected edges       :        0
+
+Writing extendedFeatureEdgeMesh to "constant/extendedFeatureEdgeMesh/enclosure.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/work/11170/roy/FRP-Beam-Cleaning/constant/extendedFeatureEdgeMesh/enclosure"
+
+Writing featureEdgeMesh to "constant/triSurface/enclosure.eMesh"
+
+ExecutionTime = 0.174286 s  ClockTime = 0 s
+
+End
+

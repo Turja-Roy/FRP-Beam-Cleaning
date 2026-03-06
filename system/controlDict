@@ -53,7 +53,7 @@ functions
         writeControl    timeStep;
         writeInterval   10;
         
-        patches         (beam);
+        patches         (beamWalls);
         
         rho             rhoInf;
         rhoInf          1.225;  // Air density at sea level
@@ -89,7 +89,7 @@ functions
         type            wallShearStress;
         libs            (fieldFunctionObjects);
         writeControl    writeTime;
-        patches         (beam);
+        patches         (beamWalls);
     }
 }
 

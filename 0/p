@@ -20,11 +20,6 @@ internalField   uniform 101325;  // Atmospheric pressure
 
 boundaryField
 {
-    walls  // Domain boundaries
-    {
-        type            zeroGradient;
-    }
-    
     beamWalls  // Solid beam walls - no flow through
     {
         type            zeroGradient;

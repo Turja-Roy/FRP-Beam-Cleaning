@@ -20,13 +20,6 @@ internalField   uniform 0.375;
 
 boundaryField
 {
-    walls
-    {
-        type            inletOutlet;
-        inletValue      uniform 0.375;
-        value           uniform 0.375;
-    }
-    
     beamWalls
     {
         type            kqRWallFunction;

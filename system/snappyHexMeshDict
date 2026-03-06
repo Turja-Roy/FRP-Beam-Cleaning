@@ -67,14 +67,6 @@ geometry
         name nozzleInlet;
         scale 0.001;        // Convert mm to m
     }
-    
-    enclosure
-    {
-        type triSurfaceMesh;
-        file "enclosure.stl";
-        name enclosure;
-        scale 0.001;        // Convert mm to m
-    }
 };
 
 castellatedMeshControls
@@ -165,15 +157,6 @@ castellatedMeshControls
             patchInfo
             {
                 type patch;
-            }
-        }
-        
-        enclosure
-        {
-            level (1 2);        // Coarse refinement - large domain boundary
-            patchInfo
-            {
-                type patch;     // Atmospheric boundary
             }
         }
     }

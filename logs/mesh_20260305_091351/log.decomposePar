@@ -1,0 +1,213 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-6aa359dae696
+Exec   : decomposePar -copyZero
+Date   : Mar 05 2026
+Time   : 09:14:13
+Host   : "c312-034.ls6.tacc.utexas.edu"
+PID    : 1040812
+I/O    : uncollated
+Case   : /work/11170/roy/FRP-Beam-Cleaning
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Calculating distribution of cells
+
+Selecting decomposer scotch
+
+Finished decomposition in 13.7213 s
+
+Calculating original mesh data
+
+Distributing cells to processors
+
+Distributing faces to processors
+
+Distributing points to processors
+
+Constructing processor meshes
+
+Processor 0
+    Number of cells = 142784
+    Number of faces shared with processor 1 = 244
+    Number of faces shared with processor 4 = 2772
+    Number of faces shared with processor 5 = 2585
+    Number of faces shared with processor 6 = 5000
+    Number of faces shared with processor 8 = 3941
+    Number of faces shared with processor 9 = 45
+    Number of processor patches = 6
+    Number of processor faces = 14587
+    Number of boundary faces = 5375
+
+Processor 1
+    Number of cells = 140723
+    Number of faces shared with processor 0 = 244
+    Number of faces shared with processor 3 = 2961
+    Number of faces shared with processor 4 = 2497
+    Number of faces shared with processor 5 = 2749
+    Number of faces shared with processor 8 = 117
+    Number of faces shared with processor 9 = 2852
+    Number of processor patches = 6
+    Number of processor faces = 11420
+    Number of boundary faces = 5106
+
+Processor 2
+    Number of cells = 140268
+    Number of faces shared with processor 3 = 550
+    Number of faces shared with processor 6 = 2537
+    Number of faces shared with processor 10 = 2849
+    Number of faces shared with processor 11 = 2250
+    Number of processor patches = 4
+    Number of processor faces = 8186
+    Number of boundary faces = 8138
+
+Processor 3
+    Number of cells = 142430
+    Number of faces shared with processor 1 = 2961
+    Number of faces shared with processor 2 = 550
+    Number of faces shared with processor 5 = 6220
+    Number of faces shared with processor 6 = 1736
+    Number of faces shared with processor 7 = 2148
+    Number of faces shared with processor 9 = 2962
+    Number of faces shared with processor 10 = 193
+    Number of faces shared with processor 11 = 3250
+    Number of processor patches = 8
+    Number of processor faces = 20020
+    Number of boundary faces = 13628
+
+Processor 4
+    Number of cells = 140317
+    Number of faces shared with processor 0 = 2772
+    Number of faces shared with processor 1 = 2497
+    Number of faces shared with processor 5 = 56
+    Number of faces shared with processor 8 = 3331
+    Number of faces shared with processor 9 = 63
+    Number of processor patches = 5
+    Number of processor faces = 8719
+    Number of boundary faces = 8717
+
+Processor 5
+    Number of cells = 141418
+    Number of faces shared with processor 0 = 2585
+    Number of faces shared with processor 1 = 2749
+    Number of faces shared with processor 3 = 6220
+    Number of faces shared with processor 4 = 56
+    Number of faces shared with processor 6 = 400
+    Number of faces shared with processor 7 = 1557
+    Number of faces shared with processor 8 = 53
+    Number of faces shared with processor 9 = 2593
+    Number of processor patches = 8
+    Number of processor faces = 16213
+    Number of boundary faces = 2837
+
+Processor 6
+    Number of cells = 141667
+    Number of faces shared with processor 0 = 5000
+    Number of faces shared with processor 2 = 2537
+    Number of faces shared with processor 3 = 1736
+    Number of faces shared with processor 5 = 400
+    Number of faces shared with processor 7 = 718
+    Number of faces shared with processor 10 = 2687
+    Number of processor patches = 6
+    Number of processor faces = 13078
+    Number of boundary faces = 5570
+
+Processor 7
+    Number of cells = 140270
+    Number of faces shared with processor 3 = 2148
+    Number of faces shared with processor 5 = 1557
+    Number of faces shared with processor 6 = 718
+    Number of faces shared with processor 10 = 2057
+    Number of faces shared with processor 11 = 2350
+    Number of processor patches = 5
+    Number of processor faces = 8830
+    Number of boundary faces = 8826
+
+Processor 8
+    Number of cells = 141899
+    Number of faces shared with processor 0 = 3941
+    Number of faces shared with processor 1 = 117
+    Number of faces shared with processor 4 = 3331
+    Number of faces shared with processor 5 = 53
+    Number of faces shared with processor 9 = 2840
+    Number of processor patches = 5
+    Number of processor faces = 10282
+    Number of boundary faces = 7908
+
+Processor 9
+    Number of cells = 142859
+    Number of faces shared with processor 0 = 45
+    Number of faces shared with processor 1 = 2852
+    Number of faces shared with processor 3 = 2962
+    Number of faces shared with processor 4 = 63
+    Number of faces shared with processor 5 = 2593
+    Number of faces shared with processor 8 = 2840
+    Number of processor patches = 6
+    Number of processor faces = 11355
+    Number of boundary faces = 5357
+
+Processor 10
+    Number of cells = 143065
+    Number of faces shared with processor 2 = 2849
+    Number of faces shared with processor 3 = 193
+    Number of faces shared with processor 6 = 2687
+    Number of faces shared with processor 7 = 2057
+    Number of faces shared with processor 11 = 596
+    Number of processor patches = 5
+    Number of processor faces = 8382
+    Number of boundary faces = 8292
+
+Processor 11
+    Number of cells = 142300
+    Number of faces shared with processor 2 = 2250
+    Number of faces shared with processor 3 = 3250
+    Number of faces shared with processor 7 = 2350
+    Number of faces shared with processor 10 = 596
+    Number of processor patches = 4
+    Number of processor faces = 8446
+    Number of boundary faces = 8246
+
+Number of processor faces = 69759
+Max number of cells = 143065 (0.987059% above average 141667)
+Max number of processor patches = 8 (41.1765% above average 5.66667)
+Max number of faces between processors = 20020 (72.1928% above average 11626.5)
+
+Time = 0s
+
+Processor 0: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor0/0"
+Processor 1: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor1/0"
+Processor 2: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor2/0"
+Processor 3: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor3/0"
+Processor 4: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor4/0"
+Processor 5: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor5/0"
+Processor 6: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor6/0"
+Processor 7: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor7/0"
+Processor 8: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor8/0"
+Processor 9: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor9/0"
+Processor 10: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor10/0"
+Processor 11: copying "/work/11170/roy/FRP-Beam-Cleaning/0"
+ to "/work/11170/roy/FRP-Beam-Cleaning/processor11/0"
+
+End
+

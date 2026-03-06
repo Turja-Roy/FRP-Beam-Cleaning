@@ -1,0 +1,71 @@
+/*---------------------------------------------------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+Build  : 12-6aa359dae696
+Exec   : blockMesh
+Date   : Mar 03 2026
+Time   : 08:37:53
+Host   : "c313-103.ls6.tacc.utexas.edu"
+PID    : 94574
+I/O    : uncollated
+Case   : /work/11170/roy/FRP-Beam-Cleaning
+nProcs : 1
+sigFpe : Enabling floating point exception trapping (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Reading "blockMeshDict"
+
+Creating block mesh from
+    "system/blockMeshDict"
+Creating block edges
+No non-planar block faces defined
+Creating topology blocks
+Creating topology patches
+
+Creating block mesh topology
+
+Check topology
+
+	Basic statistics
+		Number of internal faces : 0
+		Number of boundary faces : 6
+		Number of defined boundary faces : 6
+		Number of undefined boundary faces : 0
+	Checking patch -> block consistency
+
+Creating block offsets
+Creating merge list .
+
+Creating polyMesh from blockMesh
+Creating points with scale 0.001
+    Block 0 cell size :
+        i : 0.005
+        j : 0.0249412 .. 0.0249412
+        k : 0.005
+Creating cells
+Creating patches
+
+Writing polyMesh
+----------------
+Mesh Information
+----------------
+  boundingBox: (-0.25 -3.74 -0.25) (0.25 0.5 0.25)
+  nPoints: 1744371
+  nCells: 1700000
+  nFaces: 5144000
+  nInternalFaces: 5056000
+----------------
+Patches
+----------------
+  patch 0 (start: 5056000 size: 88000) name: enclosure
+
+End
+

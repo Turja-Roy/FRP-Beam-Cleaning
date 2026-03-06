@@ -1,0 +1,31 @@
+# Wavefront OBJ file written 2026-03-05T09:14:12
+o beam_back_opening_edgeMesh
+
+# points : 8
+# lines  : 12
+
+# <points count="8">
+v -19.05 -3240 -19.05
+v 19.05 -3240 -19.05
+v -19.05 -3240.1 -19.05
+v 19.05 -3240.1 -19.05
+v 19.05 -3240 19.05
+v 19.05 -3240.1 19.05
+v -19.05 -3240 19.05
+v -19.05 -3240.1 19.05
+# </points>
+
+# <edges count="12">
+l 3 1
+l 1 2
+l 2 4
+l 4 3
+l 2 5
+l 5 6
+l 6 4
+l 5 7
+l 7 8
+l 8 6
+l 3 8
+l 7 1
+# </edges>

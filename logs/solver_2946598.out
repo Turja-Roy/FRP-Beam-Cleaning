@@ -1,0 +1,98 @@
+==========================================
+Lonestar6 Performance Metrics
+Job: BeamClean_Solver
+Job ID: 2946598
+Node(s): c313-123
+Tasks: 12
+Memory: 48GB
+Expected cells/core: ~142,000 (1.7M / 12)
+Start time: Thu Feb 26 23:27:23 CST 2026
+==========================================
+
+OpenFOAM version:
+/home1/apps/intel24/impi21/OpenFOAM/OpenFOAM-12/bin/rhoSimpleFoam
+
+Working directory: /work/11170/roy/FRP-Beam-Cleaning
+
+Logs will be saved to: logs/solver_20260226_232723
+
+Mesh already decomposed for 12 processors (found 12 processor directories)
+✓ Using existing decomposition
+
+Running rhoSimpleFoam in parallel...
+Reconstructing solution...
+✓ Solution reconstructed
+
+==========================================
+Solver FAILED!
+==========================================
+
+Error found in log:
+[0] --> FOAM FATAL ERROR: 
+[0] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor0/0/alphat"
+[0] 
+[0]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[0]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line 539.
+[0] 
+--
+[8] --> FOAM FATAL ERROR: 
+[8] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor8/0/alphat"
+[8] 
+[8]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[8]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line 539.
+[8] 
+--
+[2] --> FOAM FATAL ERROR: 
+[4] 
+[4] --> FOAM FATAL ERROR: 
+[4] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor4/0/alphat"
+[4] 
+[4]     From function Abort(1) on node 8 (rank 8 in comm 496): application called MPI_Abort(comm=0x84000002, 1) - process 8
+
+[2] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor2/0/alphat"
+--
+[7] --> FOAM FATAL ERROR: 
+[5] 
+[5] --> FOAM FATAL ERROR: 
+[7] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor7/0/alphat"
+[7] 
+[7]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[7]     in file 
+[5] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor5/0/alphat"
+--
+[6] --> FOAM FATAL ERROR: 
+[6] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor6/0/alphat"
+[6] 
+[6]     From function --> FOAM FATAL ERROR: 
+[9] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor9/0/alphat"
+[9] 
+[9]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[9]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[6]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line 539.
+--
+[10] --> FOAM FATAL ERROR: 
+[1] [10] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor10/0/alphat"
+[10] 
+[10]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[10]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line 539.
+[10] 
+--
+[1] --> FOAM FATAL ERROR: 
+[1] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor1/0/alphat"
+[1] 
+[1]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[1]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line 539.
+[1] 
+--
+[11] --> FOAM FATAL ERROR: 
+[11] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor11/0/alphat"
+[11] 
+[11]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[3] --> FOAM FATAL ERROR: 
+[3] cannot find file "/work/11170/roy/FRP-Beam-Cleaning/processor3/0/alphat"
+[3] 
+[3]     From function virtual Foam::autoPtr<Foam::ISstream> Foam::fileOperations::uncollatedFileOperation::readStream(regIOobject &, const fileName &, const word &, const bool) const
+[3] [11]     in file global/fileOperations/uncollatedFileOperation/uncollatedFileOperation.C at line 539.
+[11] 
+
+Check full log: logs/solver_20260226_232723/log.rhoSimpleFoam

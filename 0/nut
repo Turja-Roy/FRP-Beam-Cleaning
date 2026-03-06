@@ -20,12 +20,6 @@ internalField   uniform 0;
 
 boundaryField
 {
-    walls
-    {
-        type            calculated;
-        value           uniform 0;
-    }
-    
     beamWalls
     {
         type            nutkWallFunction;

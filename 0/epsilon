@@ -20,13 +20,6 @@ internalField   uniform 14.855;
 
 boundaryField
 {
-    walls
-    {
-        type            inletOutlet;
-        inletValue      uniform 14.855;
-        value           uniform 14.855;
-    }
-    
     beamWalls
     {
         type            epsilonWallFunction;
