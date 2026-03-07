@@ -26,19 +26,6 @@ boundaryField
         value           uniform 14.855;
     }
     
-    nozzle
-    {
-        type            epsilonWallFunction;
-        value           uniform 14.855;
-    }
-    
-    nozzleInlet
-    {
-        type            turbulentMixingLengthDissipationRateInlet;
-        mixingLength    0.001;  // 1mm
-        value           uniform 14.855;
-    }
-    
     beamFrontOpening
     {
         type            inletOutlet;
@@ -46,10 +33,10 @@ boundaryField
         value           uniform 14.855;
     }
     
-    beamBackOpening
+    beamBackOpening  // Turbulent dissipation at inlet
     {
-        type            inletOutlet;
-        inletValue      uniform 14.855;
+        type            turbulentMixingLengthDissipationRateInlet;
+        mixingLength    0.001;  // 1mm
         value           uniform 14.855;
     }
     

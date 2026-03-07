@@ -25,31 +25,17 @@ boundaryField
         type            zeroGradient;
     }
     
-    nozzle  // Nozzle exterior walls - no flow through
-    {
-        type            zeroGradient;
-    }
-    
-    nozzleInlet  // HIGH PRESSURE AIR INLET - 70 psi
+    // HIGH PRESSURE AIR INLET - 70 psi at beam back (where nozzle would be)
+    beamBackOpening
     {
         type            totalPressure;
         p0              uniform 482633;  // 70 psi absolute (482.63 kPa, 4.83 bar)
         value           uniform 482633;
     }
     
-    // ALL OUTLETS at atmospheric pressure
+    // ALL OTHER OUTLETS at atmospheric pressure
     
     beamFrontOpening  // Front opening of beam
-    {
-        type            waveTransmissive;
-        field           p;
-        gamma           1.4;
-        fieldInf        101325;
-        lInf            1.0;
-        value           uniform 101325;
-    }
-    
-    beamBackOpening  // Back opening of beam
     {
         type            waveTransmissive;
         field           p;

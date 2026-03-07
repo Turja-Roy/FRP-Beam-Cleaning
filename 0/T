@@ -25,17 +25,6 @@ boundaryField
         type            zeroGradient;
     }
     
-    nozzle
-    {
-        type            zeroGradient;
-    }
-    
-    nozzleInlet
-    {
-        type            fixedValue;
-        value           uniform 300;
-    }
-    
     beamFrontOpening
     {
         type            inletOutlet;
@@ -43,10 +32,9 @@ boundaryField
         value           uniform 300;
     }
     
-    beamBackOpening
+    beamBackOpening  // Air inlet temperature
     {
-        type            inletOutlet;
-        inletValue      uniform 300;
+        type            fixedValue;
         value           uniform 300;
     }
     

@@ -26,19 +26,6 @@ boundaryField
         value           uniform 0.375;
     }
     
-    nozzle
-    {
-        type            kqRWallFunction;
-        value           uniform 0.375;
-    }
-    
-    nozzleInlet
-    {
-        type            turbulentIntensityKineticEnergyInlet;
-        intensity       0.05;  // 5% turbulence intensity
-        value           uniform 0.375;
-    }
-    
     beamFrontOpening
     {
         type            inletOutlet;
@@ -46,10 +33,10 @@ boundaryField
         value           uniform 0.375;
     }
     
-    beamBackOpening
+    beamBackOpening  // Turbulent kinetic energy at inlet
     {
-        type            inletOutlet;
-        inletValue      uniform 0.375;
+        type            turbulentIntensityKineticEnergyInlet;
+        intensity       0.05;  // 5% turbulence intensity
         value           uniform 0.375;
     }
     
