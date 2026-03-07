@@ -187,14 +187,12 @@ castellatedMeshControls
         }
     }
     
-    // CRITICAL: This point MUST be inside the beam hollow interior
-    // Your beam interior (hollow part) is at:
-    //   X: -19.05 to +19.05 mm (±0.01905 m)
-    //   Y: 0 to -3240 mm (0 to -3.24 m)
-    //   Z: -19.05 to +19.05 mm (±0.01905 m)
-    //
-    // Using center point of interior cavity:
-    locationInMesh (0.0 -1.62 0.0);
+    // locationInMesh point: Inside the enclosure (NOT inside the beam)
+    // This ensures BOTH the enclosure AND beam interior are kept
+    // The enclosure is connected to beam interior through holes and open ends
+    // Enclosure: X: ±250mm, Y: -3740 to +500mm, Z: ±250mm
+    // Point (0.2, 0.4, 0.2) = (200mm, 400mm, 200mm) is in the enclosure corner
+    locationInMesh (0.2 0.4 0.2);
     
     allowFreeStandingZoneFaces true;
 }
