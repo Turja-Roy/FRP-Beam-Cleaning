@@ -1,0 +1,152 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      binary;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+15
+(
+    enclosure
+    {
+        type            patch;
+        nFaces          19630;
+        startFace       1547328;
+    }
+    beamWalls
+    {
+        type            wall;
+        inGroups        List<word> 1(wall);
+        nFaces          10930;
+        startFace       1566958;
+    }
+    beamFrontOpening
+    {
+        type            patch;
+        nFaces          7442;
+        startFace       1577888;
+    }
+    beamBackOpening
+    {
+        type            patch;
+        nFaces          0;
+        startFace       1585330;
+    }
+    beamHoles
+    {
+        type            patch;
+        nFaces          0;
+        startFace       1585330;
+    }
+    procBoundary2to0
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          845;
+        startFace       1585330;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    0;
+    }
+    procBoundary2to3
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          1529;
+        startFace       1586175;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    3;
+    }
+    procBoundary2to4
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          12802;
+        startFace       1587704;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    4;
+    }
+    procBoundary2to5
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          110;
+        startFace       1600506;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    5;
+    }
+    procBoundary2to6
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          1508;
+        startFace       1600616;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    6;
+    }
+    procBoundary2to7
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          175;
+        startFace       1602124;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    7;
+    }
+    procBoundary2to8
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          2320;
+        startFace       1602299;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    8;
+    }
+    procBoundary2to9
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          1366;
+        startFace       1604619;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    9;
+    }
+    procBoundary2to10
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          6022;
+        startFace       1605985;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    10;
+    }
+    procBoundary2to11
+    {
+        type            processor;
+        inGroups        List<word> 1(processor);
+        nFaces          167;
+        startFace       1612007;
+        matchTolerance  0.0001;
+        myProcNo        2;
+        neighbProcNo    11;
+    }
+)
+
+// ************************************************************************* //

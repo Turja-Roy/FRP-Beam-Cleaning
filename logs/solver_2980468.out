@@ -1,0 +1,48 @@
+==========================================
+Lonestar6 Performance Metrics
+Job: BeamClean_Solver
+Job ID: 2980468
+Node(s): c314-113
+Tasks: 12
+Memory: 48GB
+Expected cells/core: ~142,000 (1.7M / 12)
+Start time: Sun Mar  8 08:37:45 CDT 2026
+==========================================
+
+OpenFOAM version:
+/home1/apps/intel24/impi21/OpenFOAM/OpenFOAM-12/bin/rhoSimpleFoam
+
+Working directory: /work/11170/roy/FRP-Beam-Cleaning
+
+Logs will be saved to: logs/solver_20260308_083746
+
+Decomposing mesh for 12 processors...
+NOTE: Using decomposeParDict (scotch method for optimal load balancing)
+✓ Mesh decomposed successfully
+
+Running rhoSimpleFoam in parallel...
+Reconstructing solution...
+✓ Solution reconstructed
+
+==========================================
+Solver completed!
+==========================================
+
+Final residuals:
+
+Final time step: 0
+
+Job finished at: Sun Mar  8 08:39:24 CDT 2026
+Total runtime: 99 seconds (0h 1m)
+
+==========================================
+PERFORMANCE SUMMARY
+==========================================
+Cores used: 12
+Runtime: 99 seconds
+Parallel efficiency: Check MPI communication time in logs
+Target: <10% communication overhead for good scaling
+
+To visualize results:
+  paraFoam
+Or copy results and run locally

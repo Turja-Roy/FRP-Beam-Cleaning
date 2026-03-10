@@ -1,0 +1,109 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  12
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      binary;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+boundaryField
+{
+    enclosure
+    {
+        type            inletOutlet;
+        inletValue      uniform 300;
+        value           uniform 300;
+    }
+    beamWalls
+    {
+        type            zeroGradient;
+    }
+    beamFrontOpening
+    {
+        type            inletOutlet;
+        inletValue      uniform 300;
+        value           uniform 300;
+    }
+    beamBackOpening
+    {
+        type            fixedValue;
+        value           nonuniform List<scalar> 
+0
+;
+    }
+    beamHoles
+    {
+        type            inletOutlet;
+        inletValue      nonuniform List<scalar> 
+0
+;
+        value           nonuniform List<scalar> 
+0
+;
+    }
+    procBoundary2to0
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to3
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to4
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to5
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to6
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to7
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to8
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to9
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to10
+    {
+        type            processor;
+        value           uniform 300;
+    }
+    procBoundary2to11
+    {
+        type            processor;
+        value           uniform 300;
+    }
+}
+
+
+// ************************************************************************* //
